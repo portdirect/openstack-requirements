@@ -21,7 +21,7 @@ RUN set -x \
 	&& python get-pip.py \
 	&& rm get-pip.py \
 	&& pip install virtualenv \
-    && /downloader.sh \
+	&& /downloader.sh \
 	&& virtualenv $VIRTUAL_ENV \
 	&& hash -r \
 	&& pip install --find-links /tmp/packages http://tarballs.openstack.org/neutron/neutron-master.tar.gz \

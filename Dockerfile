@@ -30,7 +30,7 @@ RUN set -x \
 	&& rm get-pip.py \
 	&& curl https://git.openstack.org/cgit/openstack/requirements/plain/global-requirements.txt > /tmp/global-requirements.txt \
 	&& curl https://git.openstack.org/cgit/openstack/requirements/plain/upper-constraints.txt > /tmp/upper-constraints.txt \
-    # There is a bug with python-nss, this is a workaround
+	# There is a bug with python-nss, this is a workaround. https://bugzilla.redhat.com/show_bug.cgi?id=1389739
 	&& sed -i '/dogtag-pki/d' /tmp/global-requirements.txt \
 	&& pip download -d /tmp -c /tmp/upper-constraints.txt python-nss \
 	&& mkdir /tmp/python-nss \
@@ -38,7 +38,7 @@ RUN set -x \
 	&& sed -i "s/if arg in ('-d', '--debug'):/if arg == '--debug':/g" /tmp/python-nss/setup.py \
 	&& mkdir /root/packages \
 	&& pip wheel -w /root/packages/ $(grep dogtag-pki /tmp/upper-constraints.txt) /tmp/python-nss/ \
-    # end bug workaround
+	# end bug workaround
 	&& pip wheel -w /root/packages/ -r /tmp/global-requirements.txt -c /tmp/upper-constraints.txt \
 	&& apt-get purge -y --auto-remove \
 		build-essential \
@@ -61,6 +61,3 @@ RUN set -x \
 		pkg-config \
 		python-dev \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /root/.cache
-
-# Create single layer containing only the files we want
-RUN mv /root/packages /packages
