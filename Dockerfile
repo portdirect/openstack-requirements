@@ -34,7 +34,7 @@ RUN set -x \
 	&& sed -i '/dogtag-pki/d' /tmp/global-requirements.txt \
 	&& pip download -d /tmp -c /tmp/upper-constraints.txt python-nss \
 	&& mkdir /tmp/python-nss \
-	&& tar xvf python-nss-*.tar.bz2 -C /tmp/python-nss --strip-components=1 \
+	&& tar xvf /tmp/python-nss-*.tar.bz2 -C /tmp/python-nss --strip-components=1 \
 	&& sed -i "s/if arg in ('-d', '--debug'):/if arg == '--debug':/g" /tmp/python-nss/setup.py \
 	&& mkdir /root/packages \
 	&& pip wheel -w /root/packages/ $(grep dogtag-pki /tmp/upper-constraints.txt) /tmp/python-nss/ \
